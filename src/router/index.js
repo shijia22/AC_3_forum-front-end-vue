@@ -6,9 +6,9 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: Home
+    path: '/', // 網址字串
+    name: 'Home', // 可以省略，某種情況下可以來指派路由
+    component: Home // Vue 元件名稱
   },
   {
     path: '/about',
