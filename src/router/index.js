@@ -48,6 +48,11 @@ const routes = [
     component: () => import('../views/UsersTop.vue'),
   },
   {
+    path: '/users/:id',
+    name: 'user',
+    component: () => import('../views/User.vue'),
+  },
+  {
     path: '*', // 星號 (*) 是萬用字元，代表所有網址
     name: 'not-found',
     component: NotFound,
