@@ -10,9 +10,11 @@
       />
       <div class="card-body">
         <p class="card-text title-wrap">
-          <a href="#">
+          <router-link
+            :to="{ name: 'restaurant', params: { id: restaurant.id } }"
+          >
             {{ restaurant.name }}
-          </a>
+          </router-link>
         </p>
         <span class="badge badge-secondary">{{
           restaurant.Category ? restaurant.Category.name : '未分類'
@@ -40,13 +42,18 @@
         </button>
         <button
           v-if="restaurant.isLiked"
-           @click.stop.prevent="deleteLike"
+          @click.stop.prevent="deleteLike"
           type="button"
           class="btn btn-danger like mr-2"
         >
           Unlike
         </button>
-        <button v-else @click.stop.prevent="addLike" type="button" class="btn btn-primary like mr-2">
+        <button
+          v-else
+          @click.stop.prevent="addLike"
+          type="button"
+          class="btn btn-primary like mr-2"
+        >
           Like
         </button>
       </div>
@@ -80,18 +87,18 @@ export default {
         isFavorited: false,
       }
     },
-        addLike () {
+    addLike() {
       this.restaurant = {
         ...this.restaurant,
-        isLiked: true
+        isLiked: true,
       }
     },
-    deleteLike () {
+    deleteLike() {
       this.restaurant = {
         ...this.restaurant,
-        isLiked: false
+        isLiked: false,
       }
-    }
+    },
   },
 }
 </script>

@@ -6,16 +6,19 @@
     <div class="card-body">
       <div v-for="comment in comments" :key="comment.id">
         <h4>
-          <a href="#">
+          <router-link
+            :to="{ name: 'restaurant', params: { id: comment.Restaurant.id } }"
+          >
             {{ comment.Restaurant.name }}
-          </a>
+          </router-link>
         </h4>
-        <p>{{ comment.text }}</p>by
+        <p>{{ comment.text }}</p>
+        by
         <a href="#">
           {{ comment.User.name }}
         </a>
         at {{ comment.createdAt | fromNow }}
-        <hr>
+        <hr />
       </div>
     </div>
   </div>
@@ -29,8 +32,8 @@ export default {
   props: {
     comments: {
       type: Array,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 }
 </script>
