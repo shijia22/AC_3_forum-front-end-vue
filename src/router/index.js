@@ -38,6 +38,11 @@ const routes = [
     component: () => import('../views/RestaurantsTop.vue'),
   },
   {
+    path: '/restaurants/:id', // 因為是由上往下匹配，所以路由順序要放在 top & feeds 後面
+    name: 'restaurant',
+    component: () => import('../views/Restaurant.vue'),
+  },
+  {
     path: '/users/top',
     name: 'users-top',
     component: () => import('../views/UsersTop.vue'),
