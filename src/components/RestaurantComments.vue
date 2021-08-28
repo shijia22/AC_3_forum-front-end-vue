@@ -7,9 +7,10 @@
     <div v-for="comment in restaurantComments" :key="comment.id">
       <blockquote class="blockquote mb-0">
         <button
-        v-if="currentUser.isAdmin"
+          v-if="currentUser.isAdmin"
           type="button"
           class="btn btn-danger float-right"
+          @click.stop.prevent="handleDeleteButtonClick(comment.id)"
         >
           Delete
         </button>
@@ -23,7 +24,7 @@
           {{ comment.createdAt | fromNow }}
         </footer>
       </blockquote>
-      <hr>
+      <hr />
     </div>
   </div>
 </template>
@@ -37,9 +38,9 @@ const dummyUser = {
     name: '管理者',
     email: 'root@example.com',
     image: 'https://i.pravatar.cc/300',
-    isAdmin: true
+    isAdmin: true,
   },
-  isAuthenticated: true
+  isAuthenticated: true,
 }
 
 export default {
@@ -47,14 +48,22 @@ export default {
   props: {
     restaurantComments: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      currentUser: dummyUser.currentUser
+      currentUser: dummyUser.currentUser,
     }
   },
   mixins: [fromNowFilter],
+  methods: {
+    handleDeleteButtonClick(commentId) {
+      console.log('handleDeleteButtonClick', commentId)
+      // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
+      // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
+      this.$emit('after-delete-comment', commentId)
+    },
+  },
 }
 </script>
