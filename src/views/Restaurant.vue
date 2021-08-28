@@ -10,12 +10,14 @@
       @after-delete-comment="afterDeleteComment"
     />
     <!-- 新增評論 CreateComment -->
+    <CreateComment :restaurant-id="restaurant.id" @after-create-comment="afterCreateComment"/>
   </div>
 </template>
 
 <script>
 import RestaurantDetail from './../components/RestaurantDetail.vue'
 import RestaurantComments from './../components/RestaurantComments.vue'
+import CreateComment from './../components/CreateComment.vue'
 
 const dummyData = {
   restaurant: {
@@ -63,10 +65,21 @@ const dummyData = {
   isLiked: false,
 }
 
+const dummyUser = {
+  currentUser: {
+    "id": 1,
+    "name": "root123",
+    "email": "root@example.com",
+    "image": "https://i.imgur.com/WMsHuNP.jpeg",
+    "isAdmin": true
+  }
+}
+
 export default {
   components: {
     RestaurantDetail,
     RestaurantComments,
+    CreateComment,
   },
   data() {
     return {
@@ -83,6 +96,7 @@ export default {
         isLiked: false,
       },
       restaurantComments: [],
+      currentUser: dummyUser.currentUser,
     }
   },
   created() {
@@ -124,6 +138,19 @@ export default {
       this.restaurantComments = this.restaurantComments.filter(
         (comment) => comment.id !== commentId
       )
+    },
+    afterCreateComment(payload) {
+      const { commentId, restaurantId, text } = payload
+      this.restaurantComments.push({ // 要 push 進去 data 的 restaurantComments: []
+        id: commentId,
+        RestaurantId: restaurantId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name
+        },
+        text, // = > text: text
+        createdAt: new Date() // 直接抓當下的時間
+      })
     },
   },
 }
