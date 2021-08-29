@@ -48,9 +48,19 @@ const routes = [
     component: () => import('../views/UsersTop.vue'),
   },
   {
-    path: '/users/:id',
-    name: 'user',
-    component: () => import('../views/User.vue'),
+    path: '/admin',
+    exact: true, // 完全匹配
+    redirect: '/admin/restaurants', // 重新導向
+  },
+  {
+    path: '/admin/restaurants',
+    name: 'admin-restaurants',
+    component: () => import('../views/AdminRestaurants.vue'),
+  },
+  {
+    path: '/admin/restaurants/:id',
+    name: 'admin-restaurant',
+    component: () => import('../views/AdminRestaurant.vue'),
   },
   {
     path: '*', // 星號 (*) 是萬用字元，代表所有網址
