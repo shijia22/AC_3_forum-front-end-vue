@@ -87,10 +87,10 @@ export default {
     }
   },
   methods: {
-    addFollowing () {
+    addFollowing () { // userId
       this.isFollowed = true
     },
-    deleteFollowing () {
+    deleteFollowing () { // userId
       this.isFollowed = false
     }
   }
