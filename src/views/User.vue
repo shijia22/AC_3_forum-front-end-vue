@@ -1,11 +1,15 @@
 <template>
   <div class="container py-5">
     <!-- UserProfileCard -->
-    <UserProfileCard  :user="user" :is-current-user="currentUser.id === user.id" :initial-is-followed="isFollowed"/>
+    <UserProfileCard
+      :user="user"
+      :is-current-user="currentUser.id === user.id"
+      :initial-is-followed="isFollowed"
+    />
     <div class="row">
       <div class="col-md-4">
         <!-- UserFollowingsCard -->
-
+        <UserFollowingsCard :followings="followings"/>
         <!-- UserFollowersCard -->
       </div>
       <div class="col-md-8">
@@ -19,6 +23,7 @@
 
 <script>
 import UserProfileCard from './../components/UserProfileCard.vue'
+import UserFollowingsCard from './../components/UserFollowingsCard.vue'
 
 const dummyData = {
   profile: {
@@ -1291,15 +1296,16 @@ const dummyUser = {
     name: '管理者',
     email: 'root@example.com',
     image: 'https://i.pravatar.cc/300',
-    isAdmin: true
+    isAdmin: true,
   },
-  isAuthenticated: true
+  isAuthenticated: true,
 }
 
 export default {
   name: 'User',
   components: {
     UserProfileCard,
+    UserFollowingsCard,
   },
   data() {
     return {
