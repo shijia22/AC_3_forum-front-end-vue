@@ -42,13 +42,13 @@ export default {
     },
   },
   methods: {
-    addFollow() { // userId
+    addFollow(userId) {
       this.user = {
         ...this.user, // 保留user內原有資料
         isFollowed: true,
       }
     },
-    deleteFollow() { // userId
+    deleteFollow(userId) {
       this.user = {
         ...this.user, // 保留user內原有資料
         isFollowed: false,

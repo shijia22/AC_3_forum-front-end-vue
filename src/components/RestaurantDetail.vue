@@ -92,25 +92,25 @@ export default {
     }
   },
   methods: {
-    addFavorite () { // restaurantId
+    addFavorite (restaurantId) { 
       this.restaurant = {
         ...this.restaurant,
         isFavorited: true
       }
     },
-    deleteFavorite () { // restaurantId
+    deleteFavorite (restaurantId) { 
       this.restaurant = {
         ...this.restaurant,
         isFavorited: false
       }
     },
-    addLike () { // restaurantId
+    addLike (restaurantId) { 
       this.restaurant = {
         ...this.restaurant,
         isLiked: true
       }
     },
-    deleteLike () { // restaurantId
+    deleteLike (restaurantId) { 
       this.restaurant = {
         ...this.restaurant,
         isLiked: false
