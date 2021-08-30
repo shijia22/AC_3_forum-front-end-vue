@@ -6,7 +6,7 @@
       </a>
       <h2>{{ user.name }}</h2>
       <span class="badge badge-secondary"
-        >追蹤人數：{{ user.FollowerCount }}</span
+        >追蹤人數：{{ user.followerCount }}</span
       >
       <p class="mt-3">
         <button
@@ -42,13 +42,13 @@ export default {
     },
   },
   methods: {
-    addFollow() {
+    addFollow() { // userId
       this.user = {
         ...this.user, // 保留user內原有資料
         isFollowed: true,
       }
     },
-    deleteFollow() {
+    deleteFollow() { // userId
       this.user = {
         ...this.user, // 保留user內原有資料
         isFollowed: false,

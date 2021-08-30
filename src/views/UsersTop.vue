@@ -6,7 +6,7 @@
       美食達人
     </h1>
     <hr />
-    <UsersTopCard :users="users"/>
+    <UsersTopCard :users="users" />
   </div>
 </template>
 
@@ -426,6 +426,7 @@ const dummyData = {
 }
 
 export default {
+  name: 'UsersTop',
   components: {
     NavTabs,
     UsersTopCard,
@@ -433,19 +434,20 @@ export default {
   data() {
     return {
       users: [],
-      userName: '',
-      followerCount: '',
     }
   },
   created() {
-    this.fetchFeeds()
+    this.fetchTopUsers()
   },
   methods: {
-    fetchFeeds() {
-      const {users, name, FollowerCount} = dummyData
-      this.users = users
-      this.userName = name
-      this.followerCount = FollowerCount
+    fetchTopUsers() {
+      this.users = dummyData.users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        image: user.image,
+        followerCount: user.FollowerCount,
+        isFollowed: user.isFollowed,
+      }))
     },
   },
 }
