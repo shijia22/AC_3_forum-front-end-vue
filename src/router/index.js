@@ -48,6 +48,11 @@ const routes = [
     component: () => import('../views/UsersTop.vue'),
   },
   {
+    path: '/users/:id',
+    name: 'user',
+    component: () => import('../views/User.vue'),
+  },
+  {
     path: '/admin',
     exact: true, // 完全匹配
     redirect: '/admin/restaurants', // 重新導向
