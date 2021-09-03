@@ -43,13 +43,42 @@
             {{ category.id }}
           </th>
           <td class="position-relative">
-            <div class="category-name">
+            <div class="category-name" v-show="!category.isEditing">
               {{ category.name }}
             </div>
+            <!-- 輸入框 -->
+            <input
+              v-show="category.isEditing"
+              v-model="category.name"
+              type="text"
+              class="form-control"
+            />
+            <span
+              v-show="category.isEditing"
+              class="cancel"
+              @click.stop.prevent="handleCancel(category.id)"
+            >
+              ✕
+            </span>
           </td>
           <td class="d-flex justify-content-between">
-            <button type="button" class="btn btn-link mr-2">
+            <button
+              type="button"
+              class="btn btn-link mr-2"
+              v-show="!category.isEditing"
+              @click.stop.prevent="toggleIsEditing(category.id)"
+            >
               Edit
+            </button>
+            <button
+              v-show="category.isEditing"
+              type="button"
+              class="btn btn-link mr-2"
+              @click.stop.prevent="
+                updateCategory({ categoryId: category.id, name: category.name })
+              "
+            >
+              Save
             </button>
             <button
               type="button"
@@ -66,7 +95,7 @@
 </template>
 
 <script>
-import {v4 as uuidv4} from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import AdminNav from '@/components/AdminNav'
 //  2. 定義暫時使用的資料
 const dummyData = {
@@ -117,21 +146,55 @@ export default {
   methods: {
     // 4. 定義 `fetchCategories` 方法，把 `dummyData` 帶入 Vue 物件
     fetchCategories() {
-      this.categories = dummyData.categories
+      this.categories = dummyData.categories.map((category) => ({
+        ...category,
+        isEditing: false, // 使用者預設沒有在編輯
+        nameCached: '',
+      }))
     },
     createCategory() {
       // TODO: 透過 API 向後端伺服器新增餐廳類別
-       this.categories.push({ // 將新的類別添加到陣列中
+      this.categories.push({
+        // 將新的類別添加到陣列中
         id: uuidv4(),
-        name: this.newCategoryName
+        name: this.newCategoryName,
       })
-      this.newCategoryName = ''// 清空原本欄位中的內容
+      this.newCategoryName = '' // 清空原本欄位中的內容
     },
     deleteCategory(categoryId) {
       // TODO: 透過 API 向後端伺服器刪除餐廳類別
       this.categories = this.categories.filter(
         (category) => category.id !== categoryId
       )
+    },
+    updateCategory({ categoryId, name }) {
+      // TODO: 透過 API 向伺服器更新類別名稱
+      this.toggleIsEditing(categoryId)
+    },
+    toggleIsEditing(categoryId) {
+      this.categories = this.categories.map((category) => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            isEditing: !category.isEditing,
+            nameCached: category.name,
+          }
+        }
+        return category
+      })
+    },
+    handleCancel(categoryId) {
+      this.categories = this.categories.map((category) => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            // 把原本的餐廳類別名稱還回去
+            name: category.nameCached,
+          }
+        }
+        return category
+      })
+      this.toggleIsEditing(categoryId)
     },
   },
 }
