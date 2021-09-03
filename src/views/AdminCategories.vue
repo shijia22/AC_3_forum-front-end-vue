@@ -146,7 +146,7 @@ export default {
   methods: {
     // 4. 定義 `fetchCategories` 方法，把 `dummyData` 帶入 Vue 物件
     fetchCategories() {
-      this.categories = dummyData.categories.map((category) => ({
+      this.categories = dummyData.categories.map(category => ({
         ...category,
         isEditing: false, // 使用者預設沒有在編輯
         nameCached: '',
@@ -199,3 +199,32 @@ export default {
   },
 }
 </script>
+<style scoped>
+.category-name {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid transparent;
+  outline: 0;
+  cursor: auto;
+}
+
+.btn-link {
+  width: 62px;
+}
+
+.cancel {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #aaaaaa;
+  border-radius: 50%;
+  user-select: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+</style>
