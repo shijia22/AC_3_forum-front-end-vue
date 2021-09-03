@@ -1,12 +1,12 @@
 <template>
   <div class="container py-5">
-    <form @after-submit="handleAfterSubmit">
+    <form @submit.stop.prevent="handleSubmit">
       <div class="form-group">
         <label for="name">Name</label>
         <input
           id="name"
-          type="text"
           v-model="name"
+          type="text"
           name="name"
           class="form-control"
           placeholder="Enter Name"
@@ -17,18 +17,20 @@
       <div class="form-group">
         <label for="image">Image</label>
         <img
-          v-if="user.image"
-          :src="user.image"
+          v-if="image"
+          :src="image"
           class="d-block img-thumbnail mb-3"
           width="200"
           height="200"
         />
+
         <input
           id="image"
           type="file"
           name="image"
           accept="image/*"
           class="form-control-file"
+          @change="handleFileChange"
         />
       </div>
 
@@ -41,46 +43,48 @@
 
 <script>
 const dummyUser = {
-  user: {
+  currentUser: {
     id: 1,
-    name: 'root',
+    name: '管理者',
     email: 'root@example.com',
-    password: '$2a$10$OJ3jR93XlEMrQtYMWOIQh.EINWgaRFTXkd0Xi5OC/Vz4maztUXEPe',
+    image: 'https://i.pravatar.cc/300',
     isAdmin: true,
-    image: 'https://i.imgur.com/58ImzMM.png',
   },
+  isAuthenticated: true,
 }
-
 export default {
-  name: 'UserEdit',
   data() {
     return {
-      user: {
-        id: 0,
-        name: '',
-        image: '',
-      },
+      id: 0,
+      image: '',
+      name: '',
+      email: '',
     }
   },
   created() {
-    const { id } = this.$route.params
-    this.fetchUser(id)
+    this.fetchUser()
   },
   methods: {
-    handleAfterSubmit(formData) {
-      // 透過 API 將表單資料送到伺服器
+    fetchUser() {
+      const { currentUser } = dummyUser
+      const { id, image, name, email } = currentUser
+      this.id = id
+      this.name = name
+      this.email = email
+      this.image = image
+    },
+    handleFileChange(e) {
+      const files = e.target.files
+      if (!files.length) return
+      const imageURL = window.URL.createObjectURL(files[0])
+      this.image = imageURL
+    },
+    handleSubmit(e) {
+      const form = e.target
+      const formData = new FormData(form)
+      // TODO: 透過 API 向伺服器更新使用者
       for (let [name, value] of formData.entries()) {
         console.log(name + ': ' + value)
-      }
-    },
-    fetchUser() {
-      const { user } = dummyUser
-      const { id, name, image } = user
-      this.user = {
-        ...this.user,
-        id,
-        name,
-        image,
       }
     },
   },
