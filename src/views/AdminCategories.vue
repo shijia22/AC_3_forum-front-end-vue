@@ -149,7 +149,7 @@ export default {
       this.categories = dummyData.categories.map(category => ({
         ...category,
         isEditing: false, // 使用者預設沒有在編輯
-        nameCached: '',
+        nameCached: '', // 用來儲存使用者編輯前的名稱
       }))
     },
     createCategory() {
