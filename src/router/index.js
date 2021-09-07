@@ -93,6 +93,11 @@ const routes = [
     component: () => import('../views/AdminCategories.vue'),
   },
   {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('../views/AdminUsers.vue'),
+  },
+  {
     path: '*', // 星號 (*) 是萬用字元，代表所有網址
     name: 'not-found',
     component: NotFound,
