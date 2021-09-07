@@ -20,8 +20,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row" v-for="user in users" :key="user.id">
+        <tr
+          v-for="user in users"
+          :key="user.id"
+        >
+          <th scope="row">
             {{ user.id }}
           </th>
           <td>{{ user.email }}</td>
