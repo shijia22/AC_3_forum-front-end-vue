@@ -10,12 +10,12 @@
       <div class="col-md-6">
         <h3>最新餐廳</h3>
         <!-- 最新餐廳 NewestRestaurants -->
-        <NewestRestaurants :restaurants="restaurants"/>
+        <NewestRestaurants :restaurants="restaurants" />
       </div>
       <div class="col-md-6">
         <!-- 最新評論 NewestComments-->
         <h3>最新評論</h3>
-        <NewestComments :comments="comments"/>
+        <NewestComments :comments="comments" />
       </div>
     </div>
   </div>
@@ -25,6 +25,9 @@
 import NavTabs from './../components/NavTabs'
 import NewestRestaurants from './../components/NewestRestaurants'
 import NewestComments from './../components/NewestComments.vue'
+
+import restaurantsAPI from './../apis/restaurants'
+import { Toast } from './../utils/helpers'
 
 const dummyData = {
   restaurants: [
@@ -580,20 +583,37 @@ export default {
     NewestRestaurants,
     NewestComments,
   },
-  data () {
+  data() {
     return {
       restaurants: [],
-      comments: []
+      comments: [],
     }
   },
-  created () {
-this.fetchFeeds()
+  created() {
+    this.fetchFeeds({
+      restaurants: '',
+      comments: '',
+    })
   },
   methods: {
-    fetchFeeds() {
-      // const { restaurants, comments } = dummyData
-      this.restaurants = dummyData.restaurants
-      this.comments = dummyData.comments.filter(comment => comment.Restaurant && comment.text)
+    async fetchFeeds() {
+      try {
+        const response = await restaurantsAPI.getFeeds({
+          restaurants,
+          comments,
+        })
+        console.log('response', response)
+        this.restaurants = dummyData.restaurants
+        this.comments = dummyData.comments.filter(
+          (comment) => comment.Restaurant && comment.text
+        )
+      } catch (error) {
+        console.log('error', error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得餐廳資料，請稍後再試',
+        })
+      }
     },
   },
 }
