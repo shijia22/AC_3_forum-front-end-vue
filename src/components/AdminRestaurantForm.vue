@@ -149,15 +149,10 @@ export default {
     async fetchCategories() {
       try {
         const { data } = await adminAPI.categories.get()
-
-        if (data.status !== 'success') {
-          throw new Error(data.message)
-        }
-
         this.categories = data.categories
         this.isLoading = false
       } catch (error) {
-        this.isLoading = false
+        console.log('error', error)
         Toast.fire({
           icon: 'error',
           title: '無法取得餐廳類別，請稍後再試',
