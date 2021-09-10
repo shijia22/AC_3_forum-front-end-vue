@@ -22,4 +22,9 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     })
   },
+  getTopUsers() {
+    return apiHelper.get('/users/top', {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    })
+  },
 }

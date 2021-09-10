@@ -161,7 +161,6 @@ export default {
           icon: 'error',
           title: '無法將餐廳取消讚，請稍後再試',
         })
-        console.log('error', error)
       }
     },
   },
