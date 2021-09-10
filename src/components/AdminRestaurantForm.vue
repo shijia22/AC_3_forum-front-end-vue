@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import adminAPI from './../apis/users'
+import adminAPI from './../apis/admin'
 import { Toast } from './../utils/helpers'
 
 export default {
