@@ -141,7 +141,6 @@ export default {
           icon: 'error',
           title: '無法將餐廳新增讚，請稍後再試',
         })
-        console.log('error', error)
       }
     },
     async deleteLike(restaurantId) {
