@@ -100,8 +100,8 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary">
-      送出
+    <button type="submit" class="btn btn-primary" :disabled="isProcessing">
+      {{ isProcessing ? "處理中..." : "送出" }}
     </button>
   </form>
 </template>
@@ -127,6 +127,10 @@ export default {
         }
       },
     },
+    isProcessing: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -142,7 +146,7 @@ export default {
   },
   methods: {
     // TODO:尚未成功顯示餐廳分類
-    async fetchCategories () {
+    async fetchCategories() {
       try {
         const { data } = await adminAPI.categories.get()
 
@@ -156,7 +160,7 @@ export default {
         this.isLoading = false
         Toast.fire({
           icon: 'error',
-          title: '無法取得餐廳類別，請稍後再試'
+          title: '無法取得餐廳類別，請稍後再試',
         })
       }
     },
@@ -173,11 +177,25 @@ export default {
         this.restaurant.image = imageURL
       }
     },
-    handleSubmit(e) {
+    handleSubmit (e) {
+      if (!this.restaurant.name) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請填寫餐廳名稱'
+        })
+        return
+      } else if (!this.restaurant.categoryId) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請選擇餐廳類別'
+        })
+        return
+      }
+
       const form = e.target
       const formData = new FormData(form)
       this.$emit('after-submit', formData)
-    },
+    }
   },
 }
 </script>
