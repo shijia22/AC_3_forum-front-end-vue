@@ -50,6 +50,34 @@ export default {
         })
       }
     },
+    async addFollowing (userId) {
+  try {
+    const { data } = await usersAPI.addFollowing({ userId })
+
+    console.log('data', data)
+
+    if (data.status !== 'success') {
+      throw new Error(data.message)
+    }
+
+    this.users = this.users.map(user => {
+      if (user.id !== userId) {
+        return user
+      } else {
+        return {
+          ...user,
+          followerCount: user.followerCount + 1,
+          isFollowed: true
+        }
+      }
+    })
+  } catch (error) {
+    Toast.fire({
+      icon: 'error',
+      title: '無法加入追蹤，請稍後再試'
+    })
+  }
+},
   },
 }
 </script>

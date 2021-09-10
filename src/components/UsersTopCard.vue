@@ -10,18 +10,18 @@
       >
       <p class="mt-3">
         <button
+          v-if="user.isFollowed"
           type="button"
           class="btn btn-danger"
-          v-if="user.isFollowed"
-          @click.stop.prevent="deleteFollow"
+          @click.stop.prevent="deleteFollowing(user.id)"
         >
           取消追蹤
         </button>
         <button
+          v-else
           type="button"
           class="btn btn-primary"
-          v-else
-          @click.stop.prevent="addFollow"
+          @click.stop.prevent="addFollowing(user.id)"
         >
           追蹤
         </button>
@@ -32,6 +32,8 @@
 
 <script>
 import { emptyImageFilter } from './../utils/mixins'
+import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
 
 export default {
   mixins: [emptyImageFilter],
@@ -42,16 +44,58 @@ export default {
     },
   },
   methods: {
-    addFollow(userId) {
-      this.user = {
-        ...this.user, // 保留user內原有資料
-        isFollowed: true,
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollowing({ userId })
+
+        console.log('data', data)
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              followerCount: user.followerCount + 1,
+              isFollowed: true,
+            }
+          }
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法加入追蹤，請稍後再試',
+        })
       }
     },
-    deleteFollow(userId) {
-      this.user = {
-        ...this.user, // 保留user內原有資料
-        isFollowed: false,
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollowing({ userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.users = this.users.map((user) => {
+          if (user.id !== userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              followerCount: user.followerCount - 1,
+              isFollowed: false,
+            }
+          }
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤，請稍後再試',
+        })
       }
     },
   },
