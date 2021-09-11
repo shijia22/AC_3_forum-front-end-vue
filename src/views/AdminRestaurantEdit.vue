@@ -32,7 +32,7 @@ export default {
         image: '',
         categoryId: '',
       },
-      isProcessing: false
+      isProcessing: false,
     }
   },
   created() {
@@ -41,11 +41,11 @@ export default {
   },
   methods: {
     async handleAfterSubmit(formData) {
-          try {
+      try {
         this.isProcessing = true
         const { data } = await adminAPI.restaurants.update({
           restaurantId: this.restaurant.id,
-          formData
+          formData,
         })
 
         if (data.status !== 'success') {
@@ -57,7 +57,7 @@ export default {
         this.isProcessing = false
         Toast.fire({
           icon: 'error',
-          title: '無法更新餐廳資料，請稍後再試'
+          title: '無法更新餐廳資料，請稍後再試',
         })
       }
     },
@@ -91,6 +91,12 @@ export default {
           title: '無法取得餐廳資料，請稍後再試',
         })
       }
+    },
+    beforeRouteUpdate(to, from, next) {
+      // 路由改變時重新抓取資料
+      const { id } = to.params
+      this.fetchRestaurant(id)
+      next()
     },
   },
 }
