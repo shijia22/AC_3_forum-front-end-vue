@@ -39,6 +39,12 @@ export default {
     const { id } = this.$route.params
     this.fetchRestaurant(id)
   },
+  beforeRouteUpdate(to, from, next) {
+    // 路由改變時重新抓取資料
+    const { id } = to.params
+    this.fetchRestaurant(id)
+    next()
+  },
   methods: {
     async handleAfterSubmit(formData) {
       try {
@@ -91,12 +97,6 @@ export default {
           title: '無法取得餐廳資料，請稍後再試',
         })
       }
-    },
-    beforeRouteUpdate(to, from, next) {
-      // 路由改變時重新抓取資料
-      const { id } = to.params
-      this.fetchRestaurant(id)
-      next()
     },
   },
 }
