@@ -1,13 +1,17 @@
 <template>
   <div class="container py-5">
     <!-- 餐廳表單 AdminRestaurantForm -->
-    <AdminRestaurantForm @after-submit="handleAfterSubmit" :initial-restaurant="restaurant"/>
+    <AdminRestaurantForm
+      @after-submit="handleAfterSubmit"
+      :initial-restaurant="restaurant"
+    />
   </div>
 </template>
 
 <script>
 import AdminRestaurantForm from './../components/AdminRestaurantForm.vue'
-
+import adminAPI from './../apis/admin'
+import { Toast } from './../utils/helpers'
 const dummyData = {
   restaurant: {
     id: 1,
@@ -29,7 +33,8 @@ export default {
   },
   data() {
     return {
-      restaurant: { // 這是物件
+      restaurant: {
+        // 這是物件
         id: -1,
         name: '',
         tel: '',
@@ -52,28 +57,35 @@ export default {
         console.log(name + ': ' + value)
       }
     },
-    fetchRestaurant(restaurantId) {
-      const { restaurant } = dummyData
-      const {
-        id,
-        name,
-        image,
-        opening_hours: openingHours,
-        tel,
-        address,
-        description,
-        CategoryId: categoryId,
-      } = restaurant
-      this.restaurant = {
-        ... this.restaurant,
-        id,
-        name,
-        image,
-        openingHours,
-        tel,
-        address,
-        description,
-        categoryId,
+    async fetchRestaurant(restaurantId) {
+      try {
+        const { data } = await adminAPI.restaurants.getDetail({ restaurantId })
+        const {
+          id,
+          name,
+          image,
+          opening_hours: openingHours,
+          tel,
+          address,
+          description,
+          CategoryId: categoryId,
+        } = data.restaurant
+        this.restaurant = {
+          ...this.restaurant,
+          id,
+          name,
+          image,
+          openingHours,
+          tel,
+          address,
+          description,
+          categoryId,
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得餐廳資料，請稍後再試',
+        })
       }
     },
   },
