@@ -15,6 +15,12 @@ export default {
         },
       })
     },
+    create({ name }) {
+      // TODO: 確認為甚麼是用解構賦值 name
+      return apiHelper.post('/admin/categories', { name }, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
+    },
   },
   restaurants: {
     getDetail({ restaurantId }) {
