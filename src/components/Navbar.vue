@@ -41,44 +41,11 @@
 </template>
 
 <script>
-// seed data
-const dummyUser = {
-  // 串 api 前模擬一組登入使用者
-  currentUser: {
-    id: 1,
-    name: '管理者',
-    email: 'root@example.com',
-    image: 'https://i.pravatar.cc/300',
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-}
+import { mapState } from 'vuex'
+
 export default {
-  // Vue 會在沒有資料時使用此預設值
-  data() {
-    return {
-      currentUser: {
-        id: -1,
-        name: '',
-        email: '',
-        image: '',
-        isAdmin: false,
-      },
-      isAuthenticated: false,
-    }
-  },
-  methods: {
-    // 會向後端 API 拉取資料
-    fetchUser() {
-      this.currentUser = {
-        ...this.currentUser, // 預設值
-        ...dummyUser.currentUser, // 向後端拉取資料時，有重複會蓋掉預設
-      }
-      this.isAuthenticated = dummyUser.isAuthenticated // 確認是否已經是合法使用者
-    },
-  },
-  created() {
-    this.fetchUser()
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated'])
   },
 }
 </script>
