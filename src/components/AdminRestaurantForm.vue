@@ -153,7 +153,6 @@ export default {
     this.fetchCategories()
   },
   methods: {
-    // TODO:尚未成功顯示餐廳分類
     async fetchCategories() {
       try {
         const { data } = await adminAPI.categories.get()
