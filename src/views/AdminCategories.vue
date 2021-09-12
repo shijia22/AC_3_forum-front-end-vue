@@ -100,7 +100,6 @@ import AdminNav from '@/components/AdminNav'
 import adminAPI from './../apis/admin'
 import { Toast } from './../utils/helpers'
 
-
 export default {
   name: 'AdminCategories',
   components: {
@@ -143,11 +142,27 @@ export default {
       })
       this.newCategoryName = '' // 清空原本欄位中的內容
     },
-    deleteCategory(categoryId) {
-      // TODO: 透過 API 向後端伺服器刪除餐廳類別
-      this.categories = this.categories.filter(
-        (category) => category.id !== categoryId
-      )
+    async deleteCategory(categoryId) {
+      try {
+        const { data } = await adminAPI.categories.delete({
+          categoryId,
+        })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.categories = this.categories.filter(
+          (category) => category.id !== categoryId
+        )
+        Toast.fire({
+          icon: 'success',
+          title: '刪除餐廳分類成功',
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法刪除餐廳分類，請稍後再試',
+        })
+      }
     },
     updateCategory({ categoryId, name }) {
       // TODO: 透過 API 向伺服器更新類別名稱
