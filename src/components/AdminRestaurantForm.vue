@@ -156,15 +156,8 @@ export default {
     async fetchCategories() {
       try {
         const { data } = await adminAPI.categories.get()
-
-        if (data.status === 'error') {
-          throw new Error(data.message)
-        }
-        this.categories = data.categories.map((category) => ({
-          ...category,
-          isEditing: false,
-          nameCached: '',
-        }))
+        this.categories = data.categories
+        this.isLoading = false
       } catch (error) {
         console.log('error', error)
         Toast.fire({
