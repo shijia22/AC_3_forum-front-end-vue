@@ -8,6 +8,12 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` },
     })
   },
+  // 取得餐廳詳細資料
+  getRestaurant({ restaurantId }) {
+    return apiHelper.get(`/restaurants/${restaurantId}`, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    })
+  },
   getFeeds() {
     return apiHelper.get('/restaurants/feeds', {
       headers: { Authorization: `Bearer ${getToken()}` },
