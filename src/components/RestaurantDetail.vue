@@ -76,6 +76,8 @@
 
 <script>
 import { emptyImageFilter } from './../utils/mixins'
+import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
 
 export default {
   name: 'RestaurantDefault',
@@ -92,30 +94,86 @@ export default {
     }
   },
   methods: {
-    addFavorite (restaurantId) { 
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: true
+    async addFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.addFavorite({ restaurantId })
+        // STEP 4: 若請求過程有錯，則進到錯誤處理
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // STEP 5: 請求成功的話，改變 Vue 內的資料狀態
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: true,
+        }
+      } catch (error) {
+        console.log('error', error)
+        // STEP 6: 請求失敗的話則跳出錯誤提示
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳加入最愛，請稍後再試',
+        })
+        console.log('error', error)
       }
     },
-    deleteFavorite (restaurantId) { 
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: false
+    async deleteFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteFavorite({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: false,
+        }
+      } catch (error) {
+        console.log('error', error)
+        // STEP 6: 請求失敗的話則跳出錯誤提示
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳移除最愛，請稍後再試',
+        })
+        console.log('error', error)
       }
     },
-    addLike (restaurantId) { 
-      this.restaurant = {
-        ...this.restaurant,
-        isLiked: true
+    async addLike(restaurantId) {
+      try {
+        const { data } = await usersAPI.addLike({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isLiked: true,
+        }
+      } catch (error) {
+        console.log('error', error)
+        // STEP 6: 請求失敗的話則跳出錯誤提示
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳新增讚，請稍後再試',
+        })
       }
     },
-    deleteLike (restaurantId) { 
-      this.restaurant = {
-        ...this.restaurant,
-        isLiked: false
+    async deleteLike(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteLike({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isLiked: false,
+        }
+      } catch (error) {
+        console.log('error', error)
+        // STEP 6: 請求失敗的話則跳出錯誤提示
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳取消讚，請稍後再試',
+        })
       }
-    }
+    },
   }
 }
 </script>
