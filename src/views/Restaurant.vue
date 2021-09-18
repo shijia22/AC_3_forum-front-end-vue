@@ -22,16 +22,7 @@ import RestaurantComments from './../components/RestaurantComments.vue'
 import CreateComment from './../components/CreateComment.vue'
 import restaurantsAPI from './../apis/restaurants'
 import { Toast } from './../utils/helpers'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: 'root123',
-    email: 'root@example.com',
-    image: 'https://i.imgur.com/WMsHuNP.jpeg',
-    isAdmin: true,
-  },
-}
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -54,12 +45,14 @@ export default {
         isLiked: false,
       },
       restaurantComments: [],
-      currentUser: dummyUser.currentUser,
     }
   },
   created() {
     const { id: restaurantId } = this.$route.params
     this.fetchRestaurant(restaurantId)
+  },
+  computed: {
+    ...mapState(['currentUser']),
   },
   watch: {
     initialRestaurant(newValue) {
