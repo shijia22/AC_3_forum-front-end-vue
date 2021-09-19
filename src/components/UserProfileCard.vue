@@ -2,11 +2,7 @@
   <div class="card mb-3">
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img
-          :src="user.image | emptyImage"
-          width="300px"
-          height="300px"
-        >
+        <img :src="user.image | emptyImage" width="300px" height="300px" />
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -64,35 +60,90 @@
 
 <script>
 import { emptyImageFilter } from './../utils/mixins'
+import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
 
 export default {
   mixins: [emptyImageFilter],
   props: {
     user: {
       type: Object,
-      required: true
+      required: true,
     },
     isCurrentUser: {
       type: Boolean,
-      required: true
+      required: true,
     },
     initialIsFollowed: {
       type: Boolean,
-      required: true
+      required: true,
+    },
+  },
+  data() {
+    return {
+      isFollowed: this.initialIsFollowed,
     }
   },
-  data () {
-    return {
-      isFollowed: this.initialIsFollowed
-    }
+  watch: {
+    initialIsFollowed(isFollowed) {
+      this.isFollowed = isFollowed
+    },
   },
   methods: {
-    addFollowing (userId) {
-      this.isFollowed = true
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollowing({ userId })
+
+        console.log('data', data)
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.isFollowed = true
+        // this.users = this.users.map((user) => {
+        //   if (user.id !== userId) {
+        //     return user
+        //   } else {
+        //     return {
+        //       ...user,
+        //       followerCount: user.followerCount + 1,
+        //       isFollowed: true,
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法加入追蹤，請稍後再試',
+        })
+      }
     },
-    deleteFollowing (userId) { 
-      this.isFollowed = false
-    }
-  }
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollowing({ userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.isFollowed = false
+        // this.users = this.users.map((user) => {
+        //   if (user.id !== userId) {
+        //     return user
+        //   } else {
+        //     return {
+        //       ...user,
+        //       followerCount: user.followerCount - 1,
+        //       isFollowed: false,
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤，請稍後再試',
+        })
+      }
+    },
+  },
 }
 </script>
